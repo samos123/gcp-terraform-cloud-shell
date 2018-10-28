@@ -1,11 +1,15 @@
 FROM gcr.io/cloudshell-images/cloudshell:latest
 
-# Add your content here
+ENV TERRAFORM_VERSION=0.10.0
 
-# To trigger a rebuild of your Cloud Shell image:
+RUN apk add --update git bash openssh
 
-# 1. Commit your changes locally: git commit -a
-# 2. Push your changes upstream: git push origin master
+ENV TF_DEV=true
+ENV TF_RELEASE=true
 
-# This triggers a rebuild of your image hosted at https://gcr.io/sam-playground-123/sam-cloud-shell
-# You can find the Cloud Source Repository hosting this file at https://source.developers.google.com/p/sam-playground-123/r/sam-cloud-shell
+WORKDIR $GOPATH/src/github.com/hashicorp/terraform
+RUN git clone https://github.com/hashicorp/terraform.git ./ && \
+    git checkout v${TERRAFORM_VERSION} && \
+    /bin/bash scripts/build.sh
+
+WORKDIR $GOPATH
