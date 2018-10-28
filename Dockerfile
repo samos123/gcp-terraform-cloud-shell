@@ -1,15 +1,11 @@
 FROM gcr.io/cloudshell-images/cloudshell:latest
 
-ENV TERRAFORM_VERSION=0.10.0
+ENV TERRAFORM_VERSION=0.11.10
 
-ENV TF_DEV=true
-ENV TF_RELEASE=true
+#     echo "${TERRAFORM_SHA256SUM}  terraform_${TERRAFORM_VERSION}_linux_amd64.zip" > terraform_${TERRAFORM_VERSION}_SHA256SUMS && \
+#    sha256sum -cs terraform_${TERRAFORM_VERSION}_SHA256SUMS && \
 
 WORKDIR $GOPATH/src/github.com/hashicorp/terraform
-RUN PATH=$PATH:$GOPATH/bin && \
-    go get github.com/mitchellh/gox && \
-    git clone https://github.com/hashicorp/terraform.git ./ && \
-    git checkout v${TERRAFORM_VERSION} && \
-    /bin/bash scripts/build.sh
-
-WORKDIR $GOPATH
+RUN curl https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip > terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
+    unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d /bin && \
+    rm -f terraform_${TERRAFORM_VERSION}_linux_amd64.zip
