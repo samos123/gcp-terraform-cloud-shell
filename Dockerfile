@@ -2,8 +2,6 @@ FROM gcr.io/cloudshell-images/cloudshell:latest
 
 ENV TERRAFORM_VERSION=0.10.0
 
-RUN apk add --update git bash openssh
-
 ENV TF_DEV=true
 ENV TF_RELEASE=true
 
