@@ -8,7 +8,8 @@ podTemplate(label: label, containers: [
   node(label) {
     stage('Create Docker images') {
       container('docker') {
-        sh "docker build -t samos123/terraform-cloudshell ."
+        sh "git clone https://github.com/samos123/gcp-terraform-cloud-shell.git tf-cloudshell"
+        sh "docker build -t samos123/terraform-cloudshell tf-cloudshell/Dockerfile"
       }
     }
   }
