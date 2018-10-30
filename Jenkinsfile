@@ -6,10 +6,15 @@ podTemplate(label: label, containers: [
   containerTemplate(name: 'helm', image: 'lachlanevenson/k8s-helm:latest', command: 'cat', ttyEnabled: true)
 ]) {
   node(label) {
+    def myRepo = checkout scm
+    def gitCommit = myRepo.GIT_COMMIT
+    def gitBranch = myRepo.GIT_BRANCH
+    def shortGitCommit = "${gitCommit[0..10]}"
+    def previousGitCommit = sh(script: "git rev-parse ${gitCommit}~", returnStdout: true)
+ 
     stage('Create Docker images') {
       container('docker') {
-        sh "git clone https://github.com/samos123/gcp-terraform-cloud-shell.git tf-cloudshell"
-        sh "docker build -t samos123/terraform-cloudshell tf-cloudshell/Dockerfile"
+        sh "docker build -t samos123/terraform-cloudshell ."
       }
     }
   }
