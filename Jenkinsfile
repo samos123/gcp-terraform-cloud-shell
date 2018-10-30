@@ -8,7 +8,7 @@ podTemplate(label: label, containers: [
   node(label) {
     stage('Create Docker images') {
       container('docker') {
-        sh "docker build -t samos123/terraform-cloudshell"
+        sh "docker build -t samos123/terraform-cloudshell ."
       }
     }
   }
