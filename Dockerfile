@@ -1,11 +1,12 @@
 FROM gcr.io/cloudshell-images/cloudshell:latest
 
-ENV TERRAFORM_VERSION=0.11.10
+ENV TERRAFORM_VERSION="0.11.10" \
+    HELM_VERSION="v2.14.0"
 
-#     echo "${TERRAFORM_SHA256SUM}  terraform_${TERRAFORM_VERSION}_linux_amd64.zip" > terraform_${TERRAFORM_VERSION}_SHA256SUMS && \
-#    sha256sum -cs terraform_${TERRAFORM_VERSION}_SHA256SUMS && \
+WORKDIR /tmp
 
-WORKDIR $GOPATH/src/github.com/hashicorp/terraform
 RUN curl https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip > terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
     unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip -d /bin && \
+    wget -q https://storage.googleapis.com/kubernetes-helm/helm-${HELM_VERSION}-linux-amd64.tar.gz -O - | tar -xzO linux-amd64/helm > /usr/local/bin/helm && \
+    chmod +x /usr/local/bin/helm && \
     rm -f terraform_${TERRAFORM_VERSION}_linux_amd64.zip
